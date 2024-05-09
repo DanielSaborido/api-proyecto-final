@@ -56,6 +56,34 @@ return [
             'throw' => false,
         ],
 
+        'imgProduct' => [
+            'driver' => 'local',
+            'root' => storage_path('app/imgProduct'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+
+        'imgCustomer' => [
+            'driver' => 'local',
+            'root' => storage_path('app/imgCustomer'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+
+        'imgCategory' => [
+            'driver' => 'local',
+            'root' => storage_path('app/imgCategory'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+
+        'imgUser' => [
+            'driver' => 'local',
+            'root' => storage_path('app/imgUser'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+
     ],
 
     /*

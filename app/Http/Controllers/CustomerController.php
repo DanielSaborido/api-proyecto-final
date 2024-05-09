@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class CustomerController extends Controller
@@ -16,16 +17,21 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->hasFile('profile_image')) {
-            $path = $request->file('profile_image')->store('profile_images');
-        } else {
-            $path = null;
+        $customer = new Customer;
+
+        if ($request->foto != null) {
+            $image_info = getimagesize($request->foto);
+            $ext = (isset($image_info["mime"]) ? explode('/', $image_info["mime"])[1] : "");
+            $exp = explode(',', $request->foto);
+            $foto = $exp[1];
+            $fecha = Carbon::now()->timestamp;
+            $filename = "foto_{$request->name}_{$fecha}.{$ext}";
+            Storage::disk('imgCustomer')->put($filename, base64_decode($foto));
+            $customer->foto = $filename;
         }
 
-        $customer = new Customer;
         $customer->name = $request->name;
         $customer->email = $request->email;
-        $customer->profile_image = $path;
         $customer->save();
         return response()->json($customer, 201);
     }

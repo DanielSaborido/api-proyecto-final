@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
@@ -16,16 +17,21 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->hasFile('profile_image')) {
-            $path = $request->file('profile_image')->store('profile_images');
-        } else {
-            $path = null;
+        $user = new User;
+
+        if ($request->foto != null) {
+            $image_info = getimagesize($request->foto);
+            $ext = (isset($image_info["mime"]) ? explode('/', $image_info["mime"])[1] : "");
+            $exp = explode(',', $request->foto);
+            $foto = $exp[1];
+            $fecha = Carbon::now()->timestamp;
+            $filename = "foto_{$request->name}_{$fecha}.{$ext}";
+            Storage::disk('imgUser')->put($filename, base64_decode($foto));
+            $user->foto = $filename;
         }
 
-        $user = new User;
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->profile_image = $path;
         $user->save();
 
         return response()->json($user, 201);

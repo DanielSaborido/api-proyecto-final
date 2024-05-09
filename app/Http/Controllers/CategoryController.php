@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
@@ -16,16 +17,21 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('category_images');
-        } else {
-            $path = null;
+        $category = new Category;
+
+        if ($request->foto != null) {
+            $image_info = getimagesize($request->foto);
+            $ext = (isset($image_info["mime"]) ? explode('/', $image_info["mime"])[1] : "");
+            $exp = explode(',', $request->foto);
+            $foto = $exp[1];
+            $fecha = Carbon::now()->timestamp;
+            $filename = "foto_{$request->name}_{$fecha}.{$ext}";
+            Storage::disk('imgCategory')->put($filename, base64_decode($foto));
+            $category->foto = $filename;
         }
 
-        $category = new Category;
         $category->name = $request->name;
         $category->description = $request->description;
-        $category->image = $path;
         $category->save();
 
         return response()->json($category, 201);
