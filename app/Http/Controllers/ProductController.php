@@ -19,15 +19,15 @@ class ProductController extends Controller
     {
         $product = new Product;
 
-        if ($request->foto != null) {
-            $image_info = getimagesize($request->foto);
+        if ($request->picture != null) {
+            $image_info = getimagesize($request->picture);
             $ext = (isset($image_info["mime"]) ? explode('/', $image_info["mime"])[1] : "");
-            $exp = explode(',', $request->foto);
-            $foto = $exp[1];
+            $exp = explode(',', $request->picture);
+            $picture = $exp[1];
             $fecha = Carbon::now()->timestamp;
             $filename = "foto_{$request->name}_{$fecha}.{$ext}";
-            Storage::disk('imgProduct')->put($filename, base64_decode($foto));
-            $product->foto = $filename;
+            Storage::disk('imgProduct')->put($filename, base64_decode($picture));
+            $product->picture = $filename;
         }
 
         $product->name = $request->name;
@@ -42,17 +42,31 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
+        $product->picture = getFileToBase64(Storage::disk('imgProduct')->get($product->picture));
         return response()->json($product);
     }
 
     public function showProductsByCategory($categoryId)
     {
         $products = Product::where('category_id', $categoryId)->get();
+        foreach ($products as $product) {
+            $product->picture = getFileToBase64(Storage::disk('imgProduct')->get($product->picture));
+        }
         return response()->json($products);
     }
 
     public function update(Request $request, Product $product)
     {
+        if ($request->has('picture')) {
+            $picture = $request->picture;
+            $ext = explode('/', mime_content_type($picture))[1];
+            $exp = explode(',', $picture);
+            $picture = $exp[1];
+            $filename = "foto_{$product->name}_".Carbon::now()->timestamp.".$ext";
+            Storage::disk('imgProduct')->put($filename, base64_decode($picture));
+            $product->picture = $filename;
+        }
+
         $product->update($request->all());
         return response()->json($product, 200);
     }

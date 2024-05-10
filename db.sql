@@ -11,32 +11,36 @@ DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS payment_methods;
 
 -- Migración para la tabla "categories"
-CREATE TABLE IF NOT EXISTS `categories` (
-    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255),
-    `description` TEXT,
-    `created_at` TIMESTAMP NULL,
-    `updated_at` TIMESTAMP NULL,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE IF NOT EXISTS categories (
+	id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
+    picture VARCHAR(255),
+	name VARCHAR(255),
+	description TEXT,
+	created_at TIMESTAMP NULL,
+	updated_at TIMESTAMP NULL,
+	PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Migración para la tabla "products"
 CREATE TABLE IF NOT EXISTS `products` (
-    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
+    `picture` VARCHAR(255),
     `name` VARCHAR(255),
     `description` TEXT,
     `price` DECIMAL(10, 2),
     `availability` BOOLEAN,
+    `quantity` INT,
     `category_id` BIGINT(20) unsigned NOT NULL,
     `created_at` TIMESTAMP NULL,
     `updated_at` TIMESTAMP NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Migración para la tabla "customers"
 CREATE TABLE IF NOT EXISTS `customers` (
-    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
+    `picture` VARCHAR(255),
     `name` VARCHAR(255),
     `email` VARCHAR(255),
     `address` TEXT,
@@ -44,11 +48,11 @@ CREATE TABLE IF NOT EXISTS `customers` (
     `created_at` TIMESTAMP NULL,
     `updated_at` TIMESTAMP NULL,
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Migración para la tabla "orders"
 CREATE TABLE IF NOT EXISTS `orders` (
-    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
     `customer_id` BIGINT(20) unsigned NOT NULL,
     `order_date` TIMESTAMP,
     `status` VARCHAR(255),
@@ -56,11 +60,11 @@ CREATE TABLE IF NOT EXISTS `orders` (
     `updated_at` TIMESTAMP NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Migración para la tabla "order_details"
 CREATE TABLE IF NOT EXISTS `order_details` (
-    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
     `order_id` BIGINT(20) unsigned NOT NULL,
     `product_id` BIGINT(20) unsigned NOT NULL,
     `quantity` INT,
@@ -70,21 +74,21 @@ CREATE TABLE IF NOT EXISTS `order_details` (
     PRIMARY KEY (`id`),
     FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Migración para la tabla "payment_methods"
 CREATE TABLE IF NOT EXISTS `payment_methods` (
-    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255),
     `description` TEXT,
     `created_at` TIMESTAMP NULL,
     `updated_at` TIMESTAMP NULL,
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Migración para la tabla "comments_and_ratings"
 CREATE TABLE IF NOT EXISTS `comments_and_ratings` (
-    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
     `product_id` BIGINT(20) unsigned NOT NULL,
     `customer_id` BIGINT(20) unsigned NOT NULL,
     `comment` TEXT,
@@ -94,11 +98,11 @@ CREATE TABLE IF NOT EXISTS `comments_and_ratings` (
     PRIMARY KEY (`id`),
     FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`customer_id`) REFERENCES `customers`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Migración para la tabla "shipments"
 CREATE TABLE IF NOT EXISTS `shipments` (
-    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
     `order_id` BIGINT(20) unsigned NOT NULL,
     `shipping_date` TIMESTAMP,
     `status` VARCHAR(255),
@@ -106,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `shipments` (
     `updated_at` TIMESTAMP NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`order_id`) REFERENCES `orders`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Migración para la tabla pivote "category_product"
 CREATE TABLE IF NOT EXISTS `category_product` (
@@ -116,19 +120,20 @@ CREATE TABLE IF NOT EXISTS `category_product` (
     `updated_at` TIMESTAMP NULL,
     FOREIGN KEY (`product_id`) REFERENCES `products`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Migración para la tabla "users"
-CREATE TABLE IF NOT EXISTS `users` (
-    `id` BIGINT(20) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255),
-    `email` VARCHAR(255) UNIQUE,
-    `password` VARCHAR(255),
-    `remember_token` VARCHAR(100),
-    `created_at` TIMESTAMP NULL,
-    `updated_at` TIMESTAMP NULL,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE IF NOT EXISTS users (
+	id BIGINT(20) unsigned NOT NULL AUTO_INCREMENT,
+    picture VARCHAR(255),
+	name VARCHAR(255),
+	email VARCHAR(255) UNIQUE,
+	password VARCHAR(255),
+	remember_token VARCHAR(100),
+	created_at TIMESTAMP NULL,
+	updated_at TIMESTAMP NULL,
+	PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Inserciones para la tabla "categories"
 INSERT INTO categories (name, description, created_at, updated_at) VALUES
@@ -159,5 +164,6 @@ INSERT INTO customers (name, email, address, phone_number, created_at, updated_a
 ('Pedro Rodríguez', 'pedro@example.com', 'Plaza Mayor 789', '555-9012', NOW(), NOW());
 
 -- Inserciones para la tabla "users" (usuarios con permisos de administrador)
-INSERT INTO users (name, email, password, created_at, updated_at) VALUES
-('Admin', 'admin@example.com', '$2y$10$RlJIf9yvt8XOfWUyMVNf0eCx4vxcFI4fYZ.X5.wa7mByAM9UH36J6', NOW(), NOW()); -- Contraseña: password
+INSERT INTO users (name, email, password, created_at,updated_at) VALUES
+('Admin', 'admin@example.com', '$2y$10$RlJIf9yvt8XOfWUyMVNf0eCx4vxcFI4fYZ.X5.wa7mByAM9UH36J6', NOW(), NOW());
+-- Contraseña: password

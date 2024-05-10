@@ -19,15 +19,15 @@ class CategoryController extends Controller
     {
         $category = new Category;
 
-        if ($request->foto != null) {
-            $image_info = getimagesize($request->foto);
+        if ($request->picture != null) {
+            $image_info = getimagesize($request->picture);
             $ext = (isset($image_info["mime"]) ? explode('/', $image_info["mime"])[1] : "");
-            $exp = explode(',', $request->foto);
-            $foto = $exp[1];
+            $exp = explode(',', $request->picture);
+            $picture = $exp[1];
             $fecha = Carbon::now()->timestamp;
             $filename = "foto_{$request->name}_{$fecha}.{$ext}";
-            Storage::disk('imgCategory')->put($filename, base64_decode($foto));
-            $category->foto = $filename;
+            Storage::disk('imgCategory')->put($filename, base64_decode($picture));
+            $category->picture = $filename;
         }
 
         $category->name = $request->name;
@@ -39,11 +39,22 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
+        $category->picture = getFileToBase64(Storage::disk('imgCategory')->get($category->picture));
         return response()->json($category);
     }
 
     public function update(Request $request, Category $category)
     {
+        if ($request->has('picture')) {
+            $picture = $request->picture;
+            $ext = explode('/', mime_content_type($picture))[1];
+            $exp = explode(',', $picture);
+            $picture = $exp[1];
+            $filename = "foto_{$category->name}_".Carbon::now()->timestamp.".$ext";
+            Storage::disk('imgCategory')->put($filename, base64_decode($picture));
+            $category->picture = $filename;
+        }
+    
         $category->update($request->all());
         return response()->json($category, 200);
     }

@@ -19,15 +19,15 @@ class CustomerController extends Controller
     {
         $customer = new Customer;
 
-        if ($request->foto != null) {
-            $image_info = getimagesize($request->foto);
+        if ($request->picture != null) {
+            $image_info = getimagesize($request->picture);
             $ext = (isset($image_info["mime"]) ? explode('/', $image_info["mime"])[1] : "");
-            $exp = explode(',', $request->foto);
-            $foto = $exp[1];
+            $exp = explode(',', $request->picture);
+            $picture = $exp[1];
             $fecha = Carbon::now()->timestamp;
             $filename = "foto_{$request->name}_{$fecha}.{$ext}";
-            Storage::disk('imgCustomer')->put($filename, base64_decode($foto));
-            $customer->foto = $filename;
+            Storage::disk('imgCustomer')->put($filename, base64_decode($picture));
+            $customer->picture = $filename;
         }
 
         $customer->name = $request->name;
@@ -38,11 +38,22 @@ class CustomerController extends Controller
 
     public function show(Customer $customer)
     {
+        $customer->picture = getFileToBase64(Storage::disk('imgCustomer')->get($customer->picture));
         return response()->json($customer);
     }
 
     public function update(Request $request, Customer $customer)
     {
+        if ($request->has('picture')) {
+            $picture = $request->picture;
+            $ext = explode('/', mime_content_type($picture))[1];
+            $exp = explode(',', $picture);
+            $picture = $exp[1];
+            $filename = "foto_{$customer->name}_".Carbon::now()->timestamp.".$ext";
+            Storage::disk('imgCustomer')->put($filename, base64_decode($picture));
+            $customer->picture = $filename;
+        }
+    
         $customer->update($request->all());
         return response()->json($customer, 200);
     }
