@@ -57,6 +57,7 @@ Route::delete('/customers/{customer}', [CustomerController::class, 'destroy']);
 // Rutas para OrderController
 Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orders', [OrderController::class, 'store']);
+Route::get('/orders/{customer}', [ProductController::class, 'showOrderByCustomer']);
 Route::get('/orders/{order}', [OrderController::class, 'show']);
 Route::put('/orders/{order}', [OrderController::class, 'update']);
 Route::delete('/orders/{order}', [OrderController::class, 'destroy']);
@@ -64,6 +65,7 @@ Route::delete('/orders/{order}', [OrderController::class, 'destroy']);
 // Rutas para OrderDetailController
 Route::get('/order-details', [OrderDetailController::class, 'index']);
 Route::post('/order-details', [OrderDetailController::class, 'store']);
+Route::get('/order-details/{order}', [ProductController::class, 'showProductsByOrder']);
 Route::get('/order-details/{orderDetail}', [OrderDetailController::class, 'show']);
 Route::put('/order-details/{orderDetail}', [OrderDetailController::class, 'update']);
 Route::delete('/order-details/{orderDetail}', [OrderDetailController::class, 'destroy']);

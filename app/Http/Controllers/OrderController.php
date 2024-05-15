@@ -24,6 +24,12 @@ class OrderController extends Controller
         return response()->json($order);
     }
 
+    public function showOrderByCustomer($customerId)
+    {
+        $orders = Order::where('customer_id', $customerId)->get();
+        return response()->json($orders);
+    }
+
     public function update(Request $request, Order $order)
     {
         $order->update($request->all());

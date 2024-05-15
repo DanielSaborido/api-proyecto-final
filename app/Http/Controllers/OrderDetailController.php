@@ -24,6 +24,12 @@ class OrderDetailController extends Controller
         return response()->json($orderDetail);
     }
 
+    public function showProductsByOrder($orderId)
+    {
+        $products = OrderDetail::where('order_id', $orderId)->get();
+        return response()->json($products);
+    }
+
     public function update(Request $request, OrderDetail $orderDetail)
     {
         $orderDetail->update($request->all());
