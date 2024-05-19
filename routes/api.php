@@ -39,6 +39,7 @@ Route::get('/products/{product}', [ProductController::class, 'show']);
 Route::get('/products/{categoy}', [ProductController::class, 'showProductsByCategory']);
 Route::put('/products/{product}', [ProductController::class, 'update']);
 Route::delete('/products/{product}', [ProductController::class, 'destroy']);
+Route::get('/products/search', [ProductController::class, 'search']);
 
 // Rutas para CategoryController
 Route::get('/categories', [CategoryController::class, 'index']);

@@ -76,4 +76,15 @@ class ProductController extends Controller
         $product->delete();
         return response()->json(null, 204);
     }
+
+    public function search(Request $request)
+    {
+        $searchTerm = $request->search;
+
+        $products = Product::where('name', 'like', "%{$searchTerm}%")
+            ->take(5)
+            ->get();
+
+        return response()->json($products);
+    }
 }
