@@ -35,7 +35,7 @@ class OrderDetailController extends Controller
                 $product->id = $product->id,
                 $product->quantity = $product->quantity,
                 $product->product_name = $productData->name,
-                $product->unit_price = $productData->price,
+                $product->total_cost = ($productData->price*$product->quantity),
             ];
         });
         return response()->json($products);
