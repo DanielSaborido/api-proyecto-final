@@ -80,6 +80,7 @@ Route::delete('/payment-methods/{paymentMethod}', [PaymentMethodController::clas
 
 // Rutas para CommentAndRatingController
 Route::get('/comments-and-ratings', [CommentAndRatingController::class, 'index']);
+Route::get('/comments-and-ratings/{product}', [CommentAndRatingController::class, 'getByProduct']);
 Route::post('/comments-and-ratings', [CommentAndRatingController::class, 'store']);
 Route::get('/comments-and-ratings/{commentAndRating}', [CommentAndRatingController::class, 'show']);
 Route::put('/comments-and-ratings/{commentAndRating}', [CommentAndRatingController::class, 'update']);

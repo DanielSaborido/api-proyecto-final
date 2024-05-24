@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\OrderDetail;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrderDetailController extends Controller
@@ -27,6 +28,16 @@ class OrderDetailController extends Controller
     public function showProductsByOrder($orderId)
     {
         $products = OrderDetail::where('order_id', $orderId)->get();
+
+        $products = $products->map(function ($product) {
+            $productData = Product::find($product->custommer_id);
+            return [
+                $product->id = $product->id,
+                $product->quantity = $product->quantity,
+                $product->product_name = $productData->name,
+                $product->unit_price = $productData->price,
+            ];
+        });
         return response()->json($products);
     }
 
