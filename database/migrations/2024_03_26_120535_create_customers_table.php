@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('picture')->nullable();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('password');
             $table->text('address');
             $table->string('phone_number');
+            $table->string('token')->unique();
             $table->timestamps();
         });
     }

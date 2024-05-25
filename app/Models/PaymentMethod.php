@@ -2,14 +2,26 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class PaymentMethod extends Model
 {
-    protected $fillable = ['name', 'description'];
+    use HasFactory;
+    protected $fillable = [
+        'customer_id',
+        'card_number',
+        'expiry_date',
+        'cvv',
+    ];
 
-    public function orders()
+    protected $hidden = [
+        'card_number',
+        'cvv',
+    ];
+
+    public function customer()
     {
-        return $this->hasMany(Order::class);
+        return $this->belongsTo(Customer::class);
     }
 }

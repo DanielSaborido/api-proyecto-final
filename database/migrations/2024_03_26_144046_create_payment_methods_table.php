@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
+            $table->foreignId('customer_id')->constrained('customers');
+            $table->string('card_number');
+            $table->string('expiry_date');
+            $table->string('cvv');
             $table->timestamps();
         });
     }

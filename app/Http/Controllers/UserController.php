@@ -18,13 +18,13 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $user = new User;
+        $fecha = Carbon::now()->timestamp;
 
         if ($request->picture != null) {
             $image_info = getimagesize($request->picture);
             $ext = (isset($image_info["mime"]) ? explode('/', $image_info["mime"])[1] : "");
             $exp = explode(',', $request->picture);
             $picture = $exp[1];
-            $fecha = Carbon::now()->timestamp;
             $filename = "foto_{$request->name}_{$fecha}.{$ext}";
             Storage::disk('imgUser')->put($filename, base64_decode($picture));
             $user->picture = $filename;
@@ -34,6 +34,8 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->save();
 
+        $user->token = $request->admin==1?`A_{$user->id}_{$fecha}`:`U_{$user->id}_{$fecha}`;
+        $user->save();
         return response()->json($user, 201);
     }
 
@@ -54,7 +56,7 @@ class UserController extends Controller
             Storage::disk('imgUser')->put($nombreArchivo, base64_decode($picture));
             $user->picture = $nombreArchivo;
         }
-    
+
         $user->update($request->all());
         return response()->json($user, 200);
     }

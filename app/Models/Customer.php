@@ -6,7 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
-    protected $fillable = ['picture', 'name', 'email', 'address', 'phone_number'];
+    protected $table = 'customers';
+    protected $fillable = ['picture', 'name', 'email', 'password','address', 'phone_number', 'token'];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'token',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'password' => 'hashed',
+    ];
 
     public function orders()
     {
