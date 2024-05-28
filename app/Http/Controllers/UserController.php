@@ -32,8 +32,6 @@ class UserController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->save();
-
         $user->token = $request->admin==1?`A_{$user->id}_{$fecha}`:`U_{$user->id}_{$fecha}`;
         $user->save();
         return response()->json($user, 201);

@@ -59,6 +59,7 @@ Route::delete('/customers/{customer}', [CustomerController::class, 'destroy']);
 Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orders', [OrderController::class, 'store']);
 Route::get('/orders/{customer}', [ProductController::class, 'showOrderByCustomer']);
+Route::get('/orders/{customer}/actual', [ProductController::class, 'showActualOrderByCustomer']);
 Route::get('/orders/{order}', [OrderController::class, 'show']);
 Route::put('/orders/{order}', [OrderController::class, 'update']);
 Route::delete('/orders/{order}', [OrderController::class, 'destroy']);
@@ -74,6 +75,7 @@ Route::delete('/order-details/{orderDetail}', [OrderDetailController::class, 'de
 // Rutas para PaymentMethodController
 Route::get('/payment-methods', [PaymentMethodController::class, 'index']);
 Route::post('/payment-methods', [PaymentMethodController::class, 'store']);
+Route::get('/payment-methods/{customer}', [PaymentMethodController::class, 'showPaymentMethodByCustomer']);
 Route::get('/payment-methods/{paymentMethod}', [PaymentMethodController::class, 'show']);
 Route::put('/payment-methods/{paymentMethod}', [PaymentMethodController::class, 'update']);
 Route::delete('/payment-methods/{paymentMethod}', [PaymentMethodController::class, 'destroy']);

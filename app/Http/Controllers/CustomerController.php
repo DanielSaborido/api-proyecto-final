@@ -32,8 +32,6 @@ class CustomerController extends Controller
 
         $customer->name = $request->name;
         $customer->email = $request->email;
-        $customer->save();
-
         $customer->token = `C_{$customer->id}_{$fecha}`;
         $customer->save();
         return response()->json($customer, 201);

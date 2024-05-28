@@ -30,6 +30,12 @@ class OrderController extends Controller
         return response()->json($orders);
     }
 
+    public function showActualOrderByCustomer($customerId)
+    {
+        $order = Order::where('customer_id', $customerId)->where('status','pending')->first();
+        return response()->json($order);
+    }
+
     public function update(Request $request, Order $order)
     {
         $order->update($request->all());

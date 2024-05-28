@@ -24,6 +24,23 @@ class PaymentMethodController extends Controller
         return response()->json($paymentMethod);
     }
 
+    public function showPaymentMethodByCustomer($customerId)
+    {
+        $paymentMethods = PaymentMethod::where('customer_id', $customerId)->get();
+
+        if ($paymentMethods->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No payment methods found for the provided customer ID.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'paymentMethods' => $paymentMethods
+        ]);
+    }
+
     public function update(Request $request, PaymentMethod $paymentMethod)
     {
         $paymentMethod->update($request->all());
