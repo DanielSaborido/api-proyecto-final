@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained('customers');
             $table->timestamp('order_date')->useCurrent();
             $table->string('status')->default('pending');
+            $table->decimal('total', 10, 2);
+            $table->string('payment_method');
             $table->timestamps();
         });
     }

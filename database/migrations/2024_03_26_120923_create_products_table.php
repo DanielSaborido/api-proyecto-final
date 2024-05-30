@@ -20,6 +20,7 @@ return new class extends Migration
             $table->boolean('availability')->default(true);
             $table->integer('quantity');
             $table->foreignId('category_id')->constrained('product_categories');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
