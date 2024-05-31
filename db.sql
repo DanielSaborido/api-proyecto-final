@@ -145,3 +145,49 @@ CREATE TABLE IF NOT EXISTS 'users' (
     'updated_at' TIMESTAMP NULL,
     PRIMARY KEY ('id')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `users` (`id`, `picture`, `name`, `email`, `password`, `phone_number`, `token`, `created_at`, `updated_at`)
+VALUES
+(1, 'user1.jpg', 'John Doe', 'johndoe@example.com', 'password123', '1234567890', 'A_1_715472', NOW(), NOW()),
+(2, 'user2.jpg', 'Jane Doe', 'janedoe@example.com', 'password123', '0987654321', 'U_2_718472', NOW(), NOW());
+
+INSERT INTO `customers` (`id`, `picture`, `name`, `email`, `password`, `address`, `phone_number`, `token`, `created_at`, `updated_at`)
+VALUES
+(1, 'customer1.jpg', 'John Smith', 'johnsmith@example.com', 'password123', '123 Main St', '1234567890', 'token123', NOW(), NOW()),
+(2, 'customer2.jpg', 'Jane Smith', 'janesmith@example.com', 'password123', '456 Elm St', '0987654321', 'token456', NOW(), NOW());
+
+INSERT INTO `categories` (`id`, `picture`, `name`, `description`, `created_at`, `updated_at`)
+VALUES
+(1, 'category1.jpg', 'Verduras', 'Verduras frescas', NOW(), NOW()),
+(2, 'category2.jpg', 'Frutas', 'Frutas frescas', NOW(), NOW());
+
+INSERT INTO `products` (`id`, `picture`, `name`, `description`, `price`, `availability`, `quantity`, `category_id`, `created_at`, `updated_at`)
+VALUES
+(1, 'product1.jpg', 'Lechuga', 'Lechuga fresca', 1.99, 1, 10, 1, NOW(), NOW()),
+(2, 'product2.jpg', 'Manzanas', 'Manzanas frescas', 0.99, 1, 20, 2, NOW(), NOW()),
+(3, 'product3.jpg', 'Pimientos', 'Pimientos frescos', 1.49, 1, 15, 1, NOW(), NOW());
+
+INSERT INTO `orders` (`id`, `customer_id`, `order_date`, `status`, `total`, `payment_method`, `created_at`, `updated_at`)
+VALUES
+(1, 1, NOW(), 'pending', 1.99, 'credit card', NOW(), NOW()),
+(2, 2, NOW(), 'pending', 0.99, 'paypal', NOW(), NOW());
+
+INSERT INTO `order_details` (`id`, `order_id`, `product_id`, `quantity`, `unit_price`, `subtotal`, `created_at`, `updated_at`)
+VALUES
+(1, 1, 1, 1, 1.99, 1.99, NOW(), NOW()),
+(2, 2, 2, 2, 0.99, 1.98, NOW(), NOW());
+
+INSERT INTO `payment_methods` (`id`, `customer_id`, `card_number`, `expiry_date`, `cvv`, `created_at`, `updated_at`)
+VALUES
+(1, 1, '1234-5678-9012-3456', '2025-12-31', '123', NOW(), NOW()),
+(2, 2, '9876-5432-1098-7654', '2026-06-30', '456', NOW(), NOW());
+
+INSERT INTO `comment_and_ratings` (`id`, `product_id`, `customer_id`, `title`, `comment`, `rating`, `created_at`, `updated_at`)
+VALUES
+(1, 1, 1, 'Buena lechuga', 'Esta lechuga es fresca!', 5, NOW(), NOW()),
+(2, 2, 2, 'Buenas manzanas', 'Estas manzanas son deliciosas!', 4, NOW(), NOW());
+
+INSERT INTO `shipments` (`id`, `order_id`, `shipping_date`, `status`, `created_at`, `updated_at`)
+VALUES
+(1, 1, NOW(), 'pending', NOW(), NOW()),
+(2, 2, NOW(), 'pending', NOW(), NOW());
