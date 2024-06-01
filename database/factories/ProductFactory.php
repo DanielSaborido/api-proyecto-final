@@ -3,23 +3,13 @@
 namespace Database\Factories;
 
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class ProductFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Product::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
     public function definition(): array
     {
         return [
@@ -29,10 +19,17 @@ class ProductFactory extends Factory
             'price' => $this->faker->randomFloat(2, 1, 1000),
             'availability' => $this->faker->boolean,
             'quantity' => $this->faker->numberBetween(1, 100),
-            'category_id' => CategoryFactory::factory(),
             'deleted_at' => null,
             'created_at' => now(),
             'updated_at' => now(),
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterMaking(function (Product $product) {
+            $category = Category::factory()->create();
+            $product->category()->associate($category);
+        });
     }
 }

@@ -41,10 +41,9 @@ class CustomerFactory extends Factory
      */
     public function customer(): CustomerFactory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'token' => 'C_' . $attributes['id'] . '_' . now()->format('YmdHis'),
-            ];
+        return $this->afterCreating(function (Customer $customer) {
+            $customer->token = 'C_' . $customer->id . '_' . now()->format('YmdHis');
+            $customer->save();
         });
     }
 }

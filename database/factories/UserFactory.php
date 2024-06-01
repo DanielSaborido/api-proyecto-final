@@ -28,7 +28,6 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'phone_number' => $this->faker->phoneNumber,
-            'email_verified_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),
         ];
@@ -41,10 +40,9 @@ class UserFactory extends Factory
      */
     public function admin(): UserFactory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'token' => 'A_' . $attributes['id'] . '_' . now()->format('YmdHis'),
-            ];
+        return $this->afterCreating(function (User $user) {
+            $user->token = 'A_' . $user->id . '_' . now()->format('YmdHis');
+            $user->save();
         });
     }
 
@@ -55,10 +53,9 @@ class UserFactory extends Factory
      */
     public function user(): UserFactory
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'token' => 'U_' . $attributes['id'] . '_' . now()->format('YmdHis'),
-            ];
+        return $this->afterCreating(function (User $user) {
+            $user->token = 'U_' . $user->id . '_' . now()->format('YmdHis');
+            $user->save();
         });
     }
 }
