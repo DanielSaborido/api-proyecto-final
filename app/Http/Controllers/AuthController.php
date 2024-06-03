@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -13,14 +14,14 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials, ['table' => 'customers'])) {
-            $user = Customer::where('email', $credentials['email'])->first();
+        $user = User::where('email', $credentials['email'])->first();
+        if ($user && Hash::check($credentials['password'], $user->password)) {
             return response()->json(['token' => $user->token], 200);
         }
 
-        if (Auth::attempt($credentials, ['table' => 'users'])) {
-            $user = User::where('email', $credentials['email'])->first();
-            return response()->json(['token' => $user->token], 200);
+        $customer = Customer::where('email', $credentials['email'])->first();
+        if ($customer && Hash::check($credentials['password'], $customer->password)) {
+            return response()->json(['token' => $customer->token], 200);
         }
 
         return response()->json(['message' => 'Unauthorized'], 401);

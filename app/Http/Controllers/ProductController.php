@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -79,11 +80,20 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        $searchTerm = $request->search;
+        Log::info('Search method called', ['search' => $request->input('search')]);
+
+        $searchTerm = $request->input('search');
+
+        if (!$searchTerm) {
+            Log::info('No search term provided');
+            return response()->json([], 400);
+        }
 
         $products = Product::where('name', 'like', "%{$searchTerm}%")
             ->take(5)
             ->get();
+
+        Log::info('Products found', ['products' => $products]);
 
         return response()->json($products);
     }
