@@ -67,7 +67,7 @@ Route::delete('/orders/{order}', [OrderController::class, 'destroy']);
 // Rutas para OrderDetailController
 Route::get('/order-details', [OrderDetailController::class, 'index']);
 Route::post('/order-details', [OrderDetailController::class, 'store']);
-Route::get('/order-details/{order}', [ProductController::class, 'showProductsByOrder']);
+Route::get('/order-details/{order}', [OrderDetailController::class, 'showProductsByOrder']);
 Route::get('/order-details/{orderDetail}', [OrderDetailController::class, 'show']);
 Route::put('/order-details/{orderDetail}', [OrderDetailController::class, 'update']);
 Route::delete('/order-details/{orderDetail}', [OrderDetailController::class, 'destroy']);

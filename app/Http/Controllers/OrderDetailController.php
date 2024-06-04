@@ -43,7 +43,7 @@ class OrderDetailController extends Controller
         $products = OrderDetail::where('order_id', $orderId)->get();
 
         $products = $products->map(function ($product) {
-            $productData = Product::find($product->custommer_id);
+            $productData = Product::find($product->product_id);
             return [
                 'id' => $product->id,
                 'quantity' => $product->quantity,
