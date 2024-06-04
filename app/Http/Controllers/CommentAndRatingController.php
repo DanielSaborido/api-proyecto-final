@@ -19,23 +19,25 @@ class CommentAndRatingController extends Controller
     {
         $commentsAndRatings = CommentAndRating::where('product_id', $product->id)->get();
 
-        $commentsAndRatings = $commentsAndRatings->map(function ($commentAndRating) {
-            $customer = Customer::find($commentAndRating->custommer_id);
+        $commentsAndRatings = $commentsAndRatings->map(function ($comments) {
+            $customer = Customer::where('id',$comments->customer_id)->first();
             return [
-                $commentAndRating->id = $commentAndRating->id,
-                $commentAndRating->rating = $commentAndRating->rating,
-                $commentAndRating->comment = $commentAndRating->comment,
-                $commentAndRating->customer_name = $customer->name,
-                $commentAndRating->customer_picture = $customer->picture
+                'id' => $comments->id,
+                'rating' => $comments->rating,
+                'title' => $comments->title,
+                'comment' => $comments->comment,
+                'customer_name' => $customer?->name,
+                'customer_picture' => $customer?->picture
             ];
         });
 
-        return response()->json($commentsAndRatingsWithCustomerInfo);
+        return response()->json($commentsAndRatings);
     }
 
     public function store(Request $request)
     {
         $commentAndRating = CommentAndRating::create($request->all());
+
         return response()->json($commentAndRating, 201);
     }
 

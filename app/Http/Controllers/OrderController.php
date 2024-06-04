@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -15,7 +16,12 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
-        $order = Order::create($request->all());
+        $order = new Order();
+        $order->customer_id = $request->customer_id;
+        $order->order_date = Carbon::parse($request->order_date);
+
+        $order->save();
+
         return response()->json($order, 201);
     }
 

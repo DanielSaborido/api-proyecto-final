@@ -16,7 +16,20 @@ class OrderDetailController extends Controller
 
     public function store(Request $request)
     {
-        $orderDetail = OrderDetail::create($request->all());
+        $orderDetail = new OrderDetail();
+        $orderDetail->order_id = $request->order_id;
+        $orderDetail->product_id = $request->product_id;
+        $orderDetail->quantity = $request->quantity;
+        $orderDetail->unit_price = $request->unit_price;
+        $orderDetail->subtotal = $request->quantity*$request->unit_price;
+
+        $orderDetail->save();
+
+        $product = Product::find($request->product_id);
+        $product->update([
+            'quantity' => $product->quantity - $request->quantity
+        ]);
+
         return response()->json($orderDetail, 201);
     }
 
@@ -32,10 +45,10 @@ class OrderDetailController extends Controller
         $products = $products->map(function ($product) {
             $productData = Product::find($product->custommer_id);
             return [
-                $product->id = $product->id,
-                $product->quantity = $product->quantity,
-                $product->product_name = $productData->name,
-                $product->total_cost = ($productData->price*$product->quantity),
+                'id' => $product->id,
+                'quantity' => $product->quantity,
+                'product_name' => $productData->name,
+                'total_cost' => ($productData->price*$product->quantity),
             ];
         });
         return response()->json($products);

@@ -58,8 +58,8 @@ Route::delete('/customers/{customer}', [CustomerController::class, 'destroy']);
 // Rutas para OrderController
 Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orders', [OrderController::class, 'store']);
-Route::get('/orders/{customer}', [ProductController::class, 'showOrderByCustomer']);
-Route::get('/orders/{customer}/actual', [ProductController::class, 'showActualOrderByCustomer']);
+Route::get('/orders/{customer}', [OrderController::class, 'showOrderByCustomer']);
+Route::get('/orders/{customer}/actual', [OrderController::class, 'showActualOrderByCustomer']);
 Route::get('/orders/{order}', [OrderController::class, 'show']);
 Route::put('/orders/{order}', [OrderController::class, 'update']);
 Route::delete('/orders/{order}', [OrderController::class, 'destroy']);

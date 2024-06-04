@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CommentAndRating extends Model
 {
-    protected $fillable = ['product_id', 'customer_id', 'comment', 'rating'];
+    protected $fillable = ['product_id', 'customer_id', 'title', 'comment', 'rating'];
 
     public function product()
     {
