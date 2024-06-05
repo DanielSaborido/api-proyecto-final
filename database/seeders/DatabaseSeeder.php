@@ -20,10 +20,12 @@ class DatabaseSeeder extends Seeder
         Customer::factory()->count(20)->customer()->create();
 
         $seasonCategory = Category::factory()->create(['name' => 'Temporada', 'description' => 'Productos de temporada.']);
-        $categories = Category::factory()->count(5)->create();
+        Category::factory()->count(5)->create();
 
-        Product::factory()->count(50)->create()->each(function ($product) use ($categories, $seasonCategory) {
-            $product->category_id = $categories->random()->id;
+        $allCategories = Category::all();
+
+        Product::factory()->count(50)->create()->each(function ($product) use ($allCategories, $seasonCategory) {
+            $product->category_id = $allCategories->random()->id;
             if (rand(0, 1)) {
                 $product->category_id = $seasonCategory->id;
             }

@@ -58,14 +58,14 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        if ($request->has('picture')) {
+        if ($request->picture != null) {
             $picture = $request->picture;
             $ext = explode('/', mime_content_type($picture))[1];
             $exp = explode(',', $picture);
             $picture = $exp[1];
             $filename = "foto_{$product->name}_".Carbon::now()->timestamp.".$ext";
             Storage::disk('imgProduct')->put($filename, base64_decode($picture));
-            $product->picture = $filename;
+            $request->merge(['picture' => $filename]);
         }
 
         $product->update($request->all());

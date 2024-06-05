@@ -32,8 +32,12 @@ class CustomerController extends Controller
 
         $customer->name = $request->name;
         $customer->email = $request->email;
-        $customer->token = `C_{$customer->id}_{$fecha}`;
+        $customer->password = $request->password;
         $customer->save();
+
+        $customer->token = "C_{$customer->id}_{$fecha}";
+        $customer->save();
+
         return response()->json($customer, 201);
     }
 
@@ -45,14 +49,14 @@ class CustomerController extends Controller
 
     public function update(Request $request, Customer $customer)
     {
-        if ($request->has('picture')) {
+        if ($request->picture != null) {
             $picture = $request->picture;
             $ext = explode('/', mime_content_type($picture))[1];
             $exp = explode(',', $picture);
             $picture = $exp[1];
             $filename = "foto_{$customer->name}_".Carbon::now()->timestamp.".$ext";
             Storage::disk('imgCustomer')->put($filename, base64_decode($picture));
-            $customer->picture = $filename;
+            $request->merge(['picture' => $filename]);
         }
 
         $customer->update($request->all());

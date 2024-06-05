@@ -32,8 +32,12 @@ class UserController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->token = $request->admin==1?`A_{$user->id}_{$fecha}`:`U_{$user->id}_{$fecha}`;
+        $user->password = $request->password;
         $user->save();
+
+        $user->token = $request->admin == 1 ? "A_{$user->id}_{$fecha}" : "U_{$user->id}_{$fecha}";
+        $user->save();
+
         return response()->json($user, 201);
     }
 
@@ -45,14 +49,14 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        if ($request->has('picture')) {
+        if ($request->picture != null) {
             $picture = $request->picture;
             $ext = explode('/', mime_content_type($picture))[1];
             $exp = explode(',', $picture);
             $picture = $exp[1];
             $nombreArchivo = "foto_{$user->name}_".Carbon::now()->timestamp.".$ext";
             Storage::disk('imgUser')->put($nombreArchivo, base64_decode($picture));
-            $user->picture = $nombreArchivo;
+            $request->merge(['picture' => $nombreArchivo]);
         }
 
         $user->update($request->all());

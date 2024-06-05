@@ -45,16 +45,16 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        if ($request->has('picture')) {
+        if ($request->picture != null) {
             $picture = $request->picture;
             $ext = explode('/', mime_content_type($picture))[1];
             $exp = explode(',', $picture);
             $picture = $exp[1];
             $filename = "foto_{$category->name}_".Carbon::now()->timestamp.".$ext";
             Storage::disk('imgCategory')->put($filename, base64_decode($picture));
-            $category->picture = $filename;
+            $request->merge(['picture' => $filename]);
         }
-    
+
         $category->update($request->all());
         return response()->json($category, 200);
     }

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('comment_and_ratings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products');
-            $table->foreignId('customer_id')->constrained('customers');
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
             $table->string('title')->nullable();
             $table->text('comment');
             $table->integer('rating');
