@@ -12,6 +12,9 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
+        foreach ($categories as $category) {
+            $category->picture = getFileToBase64(Storage::disk('imgCategory')->get($category->picture));
+        }
         return response()->json($categories);
     }
 
@@ -33,6 +36,7 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->description = $request->description;
         $category->save();
+        $category->picture = $request->picture;
 
         return response()->json($category, 201);
     }

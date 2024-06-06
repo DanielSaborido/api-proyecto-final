@@ -13,6 +13,9 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
+        foreach ($products as $product) {
+            $product->picture = getFileToBase64(Storage::disk('imgProduct')->get($product->picture));
+        }
         return response()->json($products);
     }
 
@@ -76,25 +79,5 @@ class ProductController extends Controller
     {
         $product->delete();
         return response()->json(null, 204);
-    }
-
-    public function search(Request $request)
-    {
-        Log::info('Search method called', ['search' => $request->input('search')]);
-
-        $searchTerm = $request->input('search');
-
-        if (!$searchTerm) {
-            Log::info('No search term provided');
-            return response()->json([], 400);
-        }
-
-        $products = Product::where('name', 'like', "%{$searchTerm}%")
-            ->take(5)
-            ->get();
-
-        Log::info('Products found', ['products' => $products]);
-
-        return response()->json($products);
     }
 }

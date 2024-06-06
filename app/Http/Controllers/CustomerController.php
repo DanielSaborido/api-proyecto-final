@@ -12,6 +12,11 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::all();
+        foreach ($customers as $customer) {
+            if ($customer->picture != null){
+                $customer->picture = getFileToBase64(Storage::disk('imgCustomer')->get($customer->picture));
+            }
+        }
         return response()->json($customers);
     }
 
@@ -38,12 +43,17 @@ class CustomerController extends Controller
         $customer->token = "C_{$customer->id}_{$fecha}";
         $customer->save();
 
-        return response()->json($customer, 201);
+        return response()->json([
+            'customer' => $customer,
+            'token' => $customer->token
+        ]);
     }
 
     public function show(Customer $customer)
     {
-        $customer->picture = getFileToBase64(Storage::disk('imgCustomer')->get($customer->picture));
+        if ($customer->picture != null){
+            $customer->picture = getFileToBase64(Storage::disk('imgCustomer')->get($customer->picture));
+        }
         return response()->json($customer);
     }
 

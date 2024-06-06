@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
 
         $allCategories = Category::all();
 
-        Product::factory()->count(50)->create()->each(function ($product) use ($allCategories, $seasonCategory) {
+        Product::factory()->count(30)->create()->each(function ($product) use ($allCategories, $seasonCategory) {
             $product->category_id = $allCategories->random()->id;
             if (rand(0, 1)) {
                 $product->category_id = $seasonCategory->id;

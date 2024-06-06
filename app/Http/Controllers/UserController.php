@@ -12,6 +12,9 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
+        foreach ($users as $user) {
+            $user->picture = getFileToBase64(Storage::disk('imgUser')->get($user->picture));
+        }
         return response()->json($users);
     }
 
