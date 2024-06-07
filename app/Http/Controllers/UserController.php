@@ -13,7 +13,9 @@ class UserController extends Controller
     {
         $users = User::all();
         foreach ($users as $user) {
-            $user->picture = getFileToBase64(Storage::disk('imgUser')->get($user->picture));
+            if ($user->picture != null){
+                $user->picture = getFileToBase64(Storage::disk('imgUser')->get($user->picture));
+            }
         }
         return response()->json($users);
     }
