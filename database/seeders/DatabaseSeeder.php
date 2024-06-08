@@ -17,7 +17,9 @@ class DatabaseSeeder extends Seeder
     {
         User::factory()->count(10)->user()->create();
         User::factory()->count(5)->admin()->create();
+        User::factory()->admin()->create(['name' => 'TestAdmin', 'email' => 'admin@test.com', 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi']);
         Customer::factory()->count(20)->customer()->create();
+        Customer::factory()->customer()->create(['name' => 'TestCustomer', 'email' => 'customer@test.com', 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi']);
 
         $seasonCategory = Category::factory()->create(['name' => 'Temporada', 'description' => 'Productos de temporada.']);
         Category::factory()->count(5)->create();
